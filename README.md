@@ -42,4 +42,11 @@ Compare `query.py` (with RAG) and `query_vanilla.py` (without RAG) to see the di
 ## Requirements
 
 - Qdrant running on `localhost:6333`
+```
+docker run -p 6333:6333 -p 6334:6334 \
+    -v "$(pwd)/qdrant_storage:/qdrant/storage:z" \
+    qdrant/qdrant
+
+```
+
 - Ollama with a model installed (e.g., `smollm2:1.7b`)

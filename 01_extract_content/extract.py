@@ -37,25 +37,21 @@ def process_folder(input_folder, output_folder):
     for pdf_file in pdf_files:
         print(f"Processing: {pdf_file.name}")
 
-        # Process the PDF
-        chunks = process_legal_pdfs(str(pdf_file))
-
-        # Convert chunks to serializable format
-        chunks_data = [
-            {
-                "page_content": chunk.page_content,
-                "metadata": chunk.metadata
-            }
-            for chunk in chunks
-        ]
-
         # Save to output folder with same name but .jsonl extension
         output_file = output_path / f"{pdf_file.stem}.jsonl"
-        with open(output_file, "w", encoding="utf-8") as f:
-            for chunk_data in chunks_data:
-                f.write(json.dumps(chunk_data, ensure_ascii=False) + "\n")
+        chunk_count = 0
 
-        print(f"  Saved {len(chunks)} chunks to {output_file.name}")
+        with open(output_file, "w", encoding="utf-8") as f:
+            # Process and write chunks directly to avoid memory buildup
+            for chunk in process_legal_pdfs(str(pdf_file)):
+                chunk_data = {
+                    "page_content": chunk.page_content,
+                    "metadata": chunk.metadata
+                }
+                f.write(json.dumps(chunk_data, ensure_ascii=False) + "\n")
+                chunk_count += 1
+
+        print(f"  Saved {chunk_count} chunks to {output_file.name}")
 
     print(f"\nProcessed {len(pdf_files)} files")
 
