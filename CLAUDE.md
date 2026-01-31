@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**My Little French Layer (MLFL)** - A RAG pipeline for querying French legal documents from Legifrance.
+**My Little French Lawyer (MLFL)** - A RAG pipeline for querying French legal documents from Legifrance.
 
 ## Architecture
 

@@ -1,4 +1,4 @@
-# My Little French Layer (MLFL)
+# My Little French Lawyer (MLFL)
 
 A RAG (Retrieval Augmented Generation) pipeline for querying French legal documents.
 
