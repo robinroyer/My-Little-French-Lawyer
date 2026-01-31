@@ -96,6 +96,55 @@ Results are saved to `04_evaluate/results.md` with:
 - Detailed responses for each question
 - LLM-generated analysis of differences
 
+### 6. Serve
+
+A browser-based chat interface for non-technical users.
+
+![Serve Interface](serve_example.png)
+
+```bash
+# Development mode
+cd 05_serve/backend && pip install -r requirements.txt && python main.py
+cd 05_serve/frontend && npm install && npm run dev
+```
+
+Access at `http://localhost:5173` (dev) or `http://localhost:8080` (production).
+
+**Docker Deployment:**
+
+```bash
+# Full stack (GPU)
+cd 05_serve && docker compose up --build
+
+# CPU only
+cd 05_serve && docker compose -f docker-compose.cpu.yml up --build
+
+# Standalone (external Qdrant/Ollama)
+docker run -p 8080:8080 \
+  -e LLM_PROVIDER=ollama \
+  -e OLLAMA_URL=http://your-ollama:11434 \
+  -e QDRANT_URL=http://your-qdrant:6333 \
+  mlfl-web:latest
+```
+
+**Environment Variables:**
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `LLM_PROVIDER` | `ollama` | `ollama` or `claude` |
+| `OLLAMA_URL` | `http://localhost:11434` | Ollama server URL |
+| `OLLAMA_MODEL` | `qwen3:4b` | Ollama model name |
+| `ANTHROPIC_API_KEY` | - | Required if using Claude |
+| `CLAUDE_MODEL` | `claude-sonnet-4-20250514` | Claude model name |
+| `QDRANT_URL` | `http://localhost:6333` | Qdrant server URL |
+| `QDRANT_COLLECTION` | `law_library` | Collection name |
+
+**Features:**
+- Chat interface with message history (session-only)
+- RAG-powered responses with source citations
+- Export conversations as Markdown or plain text
+- Mobile responsive design
+
 ## Requirements
 
 - Qdrant running on `localhost:6333`

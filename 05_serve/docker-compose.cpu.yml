@@ -1,0 +1,68 @@
+version: '3.8'
+
+# CPU-only version (no GPU requirements for Ollama)
+# Use: docker compose -f docker-compose.cpu.yml up
+
+services:
+  # Main web application
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - LLM_PROVIDER=ollama
+      - OLLAMA_URL=http://ollama:11434
+      - OLLAMA_MODEL=qwen3:4b
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_COLLECTION=law_library
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - mlfl-network
+
+  # Vector database
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - mlfl-network
+
+  # LLM server (CPU only)
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+      - ./scripts/ollama-entrypoint.sh:/entrypoint.sh:ro
+    environment:
+      - OLLAMA_MODEL=qwen3:4b
+    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+    restart: unless-stopped
+    networks:
+      - mlfl-network
+
+volumes:
+  qdrant_storage:
+    driver: local
+  ollama_models:
+    driver: local
+
+networks:
+  mlfl-network:
+    driver: bridge

@@ -1,0 +1,180 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-legal-parchment text-legal-ink antialiased;
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-stone-150;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-legal-mist rounded-full;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-legal-steel;
+  }
+
+  /* Selection color */
+  ::selection {
+    @apply bg-legal-gold/20 text-legal-navy;
+  }
+}
+
+@layer components {
+  /* Decorative legal border */
+  .legal-border {
+    @apply relative;
+  }
+
+  .legal-border::before {
+    content: '';
+    @apply absolute inset-0 border border-legal-mist/30 rounded-lg pointer-events-none;
+    background: linear-gradient(135deg, rgba(201, 162, 39, 0.05) 0%, transparent 50%, rgba(201, 162, 39, 0.02) 100%);
+  }
+
+  /* Ornamental corners */
+  .ornament-corners {
+    @apply relative;
+  }
+
+  .ornament-corners::before,
+  .ornament-corners::after {
+    content: '§';
+    @apply absolute text-legal-gold/30 font-serif text-2xl;
+  }
+
+  .ornament-corners::before {
+    @apply top-2 left-3;
+  }
+
+  .ornament-corners::after {
+    @apply bottom-2 right-3;
+  }
+
+  /* Parchment texture overlay */
+  .parchment-bg {
+    @apply relative bg-legal-cream;
+  }
+
+  .parchment-bg::after {
+    content: '';
+    @apply absolute inset-0 pointer-events-none opacity-40;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+
+  /* Typing indicator dots */
+  .typing-dot {
+    @apply w-2 h-2 bg-legal-steel rounded-full;
+    animation: typing 1.2s ease-in-out infinite;
+  }
+
+  .typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  /* Message bubble styling */
+  .bubble-user {
+    @apply bg-gradient-to-br from-legal-navy to-legal-slate text-white;
+    box-shadow:
+      0 4px 16px -2px rgba(30, 58, 95, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .bubble-assistant {
+    @apply bg-white text-legal-ink border border-stone-250;
+    box-shadow:
+      0 2px 12px -2px rgba(30, 58, 95, 0.08),
+      inset 0 0 0 1px rgba(201, 162, 39, 0.05);
+  }
+
+  /* Input focus ring */
+  .input-legal {
+    @apply transition-all duration-300;
+  }
+
+  .input-legal:focus {
+    @apply outline-none ring-2 ring-legal-gold/40 border-legal-gold/60;
+    box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.1);
+  }
+
+  /* Button styling */
+  .btn-legal {
+    @apply px-4 py-2 font-sans font-medium text-sm tracking-wide
+           transition-all duration-200 rounded-md
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn-legal bg-legal-navy text-white
+           hover:bg-legal-slate active:bg-legal-ink
+           shadow-legal hover:shadow-legal-lg;
+  }
+
+  .btn-secondary {
+    @apply btn-legal bg-white text-legal-slate border border-legal-mist
+           hover:bg-stone-150 hover:border-legal-steel active:bg-stone-250;
+  }
+
+  .btn-ghost {
+    @apply btn-legal text-legal-steel
+           hover:text-legal-navy hover:bg-legal-mist/20;
+  }
+
+  .btn-icon {
+    @apply p-2 rounded-full transition-all duration-200
+           text-legal-steel hover:text-legal-navy hover:bg-legal-mist/30;
+  }
+}
+
+@layer utilities {
+  /* Staggered animation delays */
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+
+  /* Gold accent text */
+  .text-accent {
+    @apply text-legal-gold;
+  }
+
+  /* Subtle grain overlay for depth */
+  .grain-overlay {
+    @apply relative;
+  }
+
+  .grain-overlay::before {
+    content: '';
+    @apply absolute inset-0 pointer-events-none opacity-20;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+}
