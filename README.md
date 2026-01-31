@@ -25,9 +25,14 @@ python 01_extract_content/extract.py
 
 Load chunks and inject into Qdrant using [BGE embeddings](https://huggingface.co/BAAI/bge-small-en-v1.5).
 
-
 ```bash
 python 02_inject_rag/inject.py
+```
+
+Monitor injection progress in another terminal:
+
+```bash
+./02_inject_rag/watch_injection.sh
 ```
 
 ### 4. Query
