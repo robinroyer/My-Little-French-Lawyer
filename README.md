@@ -2,7 +2,7 @@
 
 A RAG (Retrieval Augmented Generation) pipeline for querying French legal documents.
 
-![Pipeline](pipeline.png)
+<img src="pipeline.png" alt="Pipeline" width="600">
 
 ## Pipeline Steps
 
@@ -34,6 +34,8 @@ Monitor injection progress in another terminal:
 ```bash
 ./02_inject_rag/watch_injection.sh
 ```
+
+![Injection Progress](watch_injection_example.png)
 
 ### 4. Query
 
