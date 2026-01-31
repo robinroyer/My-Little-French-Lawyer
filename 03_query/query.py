@@ -40,16 +40,16 @@ def ask(query, llm, vector_store=None):
             doc.page_content
             for doc in vector_store.similarity_search(query, k=3)
         ])
-        prompt = f"""You are a legal assistant. Use the following law fragments to answer.
-If the answer isn't in the context, say you don't know.
+        prompt = f"""Tu es un assistant juridique français. Utilise les extraits de loi suivants pour répondre.
+Si la réponse n'est pas dans le contexte, dis que tu ne sais pas.
 
-Context: {context}
+Contexte : {context}
 
-Question: {query}"""
+Question : {query}"""
     else:
-        prompt = f"""You are a legal assistant.
+        prompt = f"""Tu es un assistant juridique français.
 
-Question: {query}"""
+Question : {query}"""
 
     response = llm.invoke(prompt)
     # Handle both Ollama (str) and ChatAnthropic (AIMessage) responses

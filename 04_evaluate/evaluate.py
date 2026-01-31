@@ -65,29 +65,29 @@ def truncate_response(response, max_length=500):
 
 def generate_analysis(questions_results, llm):
     """Generate an analysis comparing RAG vs vanilla responses."""
-    analysis_prompt = """Analyze the following comparison between RAG-augmented and vanilla LLM responses for legal questions.
+    analysis_prompt = """Analyse la comparaison suivante entre les réponses LLM augmentées par RAG et les réponses LLM classiques pour des questions juridiques.
 
-For each question, evaluate:
-1. Which response is more accurate and complete?
-2. Does RAG provide specific article references that vanilla doesn't?
-3. Are there any hallucinations in either response?
+Pour chaque question, évalue :
+1. Quelle réponse est la plus précise et complète ?
+2. Le RAG fournit-il des références d'articles spécifiques que le mode classique ne fournit pas ?
+3. Y a-t-il des hallucinations dans l'une ou l'autre des réponses ?
 
-Provide a concise summary of findings.
+Fournis un résumé concis des conclusions.
 
-Results:
+Résultats :
 """
     for result in questions_results:
         analysis_prompt += f"""
-Question: {result['question']}
+Question : {result['question']}
 
-RAG Response: {result['rag_response'][:1000]}
+Réponse RAG : {result['rag_response'][:1000]}
 
-Vanilla Response: {result['vanilla_response'][:1000]}
+Réponse classique : {result['vanilla_response'][:1000]}
 
 ---
 """
 
-    analysis_prompt += "\nProvide your analysis:"
+    analysis_prompt += "\nFournis ton analyse :"
 
     response = llm.invoke(analysis_prompt)
     if hasattr(response, 'content'):

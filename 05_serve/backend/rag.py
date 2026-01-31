@@ -57,17 +57,17 @@ def retrieve_context(vector_store: QdrantVectorStore, query: str, k: int = 3) ->
 
 def build_prompt(query: str, context: str | None = None, history: list[dict] | None = None) -> str:
     """Build the prompt for the LLM."""
-    system_prompt = """You are a helpful French legal assistant. You help users understand French law.
-Answer questions clearly and accurately. If you cite specific articles or laws, be precise.
-Always respond in the same language as the user's question."""
+    system_prompt = """Tu es un assistant juridique français. Tu aides les utilisateurs à comprendre le droit français.
+Réponds aux questions de manière claire et précise. Si tu cites des articles ou des lois spécifiques, sois précis.
+Réponds toujours dans la même langue que la question de l'utilisateur."""
 
     if context:
         system_prompt += f"""
 
-Use the following legal document excerpts to inform your answer.
-If the answer isn't clearly supported by the provided context, acknowledge this limitation.
+Utilise les extraits de documents juridiques suivants pour informer ta réponse.
+Si la réponse n'est pas clairement étayée par le contexte fourni, reconnais cette limitation.
 
-Context:
+Contexte:
 {context}"""
 
     # Build conversation history
