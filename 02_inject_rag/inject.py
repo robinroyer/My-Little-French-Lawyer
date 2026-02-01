@@ -74,7 +74,7 @@ def load_jsonl_files(input_folder, max_workers=4):
 
 if __name__ == "__main__":
     script_dir = Path(__file__).parent
-    input_folder = script_dir.parent / "01_extract_content" / "output"
+    input_folder = script_dir.parent / "01_clean" / "02_structured"
 
     # Load all documents from JSONL files
     documents = load_jsonl_files(input_folder)
