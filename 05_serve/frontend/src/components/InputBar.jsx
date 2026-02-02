@@ -5,8 +5,10 @@ import { LAW_CODES } from '../data/lawCodes'
 export default function InputBar({ onSend, disabled, useRag, onUseRagChange, selectedCodes, onSelectedCodesChange }) {
   const [message, setMessage] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [codeFilter, setCodeFilter] = useState('')
   const textareaRef = useRef(null)
   const dropdownRef = useRef(null)
+  const filterInputRef = useRef(null)
 
   // Auto-resize textarea
   useEffect(() => {
@@ -27,11 +29,24 @@ export default function InputBar({ onSend, disabled, useRag, onUseRagChange, sel
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setIsDropdownOpen(false)
+        setCodeFilter('')
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  // Focus filter input when dropdown opens
+  useEffect(() => {
+    if (isDropdownOpen && filterInputRef.current) {
+      filterInputRef.current.focus()
+    }
+  }, [isDropdownOpen])
+
+  // Filter law codes based on search text
+  const filteredCodes = LAW_CODES.filter((code) =>
+    code.name.toLowerCase().includes(codeFilter.toLowerCase())
+  )
 
   const toggleCode = (codeId) => {
     if (selectedCodes.includes(codeId)) {
@@ -169,35 +184,51 @@ export default function InputBar({ onSend, disabled, useRag, onUseRagChange, sel
                       transition={{ duration: 0.15 }}
                       className="absolute bottom-full left-0 mb-2 w-72 max-h-64 overflow-y-auto bg-white rounded-xl border border-stone-200 shadow-legal-lg z-50"
                     >
-                      <div className="p-2 border-b border-stone-100 flex justify-between items-center">
-                        <span className="text-[11px] font-medium text-legal-ink">Filtrer par code</span>
-                        {selectedCodes.length > 0 && (
-                          <button
-                            type="button"
-                            onClick={() => onSelectedCodesChange([])}
-                            className="text-[10px] text-legal-mist hover:text-legal-ink transition-colors"
-                          >
-                            Effacer
-                          </button>
-                        )}
+                      <div className="p-2 border-b border-stone-100">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-[11px] font-medium text-legal-ink">Filtrer par code</span>
+                          {selectedCodes.length > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => onSelectedCodesChange([])}
+                              className="text-[10px] text-legal-mist hover:text-legal-ink transition-colors"
+                            >
+                              Effacer
+                            </button>
+                          )}
+                        </div>
+                        <input
+                          ref={filterInputRef}
+                          type="text"
+                          value={codeFilter}
+                          onChange={(e) => setCodeFilter(e.target.value)}
+                          placeholder="Rechercher un code..."
+                          className="w-full px-2 py-1.5 text-[11px] bg-stone-50 border border-stone-200 rounded-lg outline-none focus:border-legal-gold/50 focus:ring-1 focus:ring-legal-gold/20 transition-all"
+                        />
                       </div>
                       <div className="p-1">
-                        {LAW_CODES.map((code) => (
-                          <label
-                            key={code.id}
-                            className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-stone-50 cursor-pointer transition-colors"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={selectedCodes.includes(code.id)}
-                              onChange={() => toggleCode(code.id)}
-                              className="w-3.5 h-3.5 rounded border-stone-300 text-legal-navy focus:ring-legal-gold/50 cursor-pointer"
-                            />
-                            <span className="text-[11px] text-legal-ink font-sans truncate">
-                              {code.name}
-                            </span>
-                          </label>
-                        ))}
+                        {filteredCodes.length === 0 ? (
+                          <div className="px-2 py-3 text-center text-[11px] text-legal-mist">
+                            Aucun code trouvé
+                          </div>
+                        ) : (
+                          filteredCodes.map((code) => (
+                            <label
+                              key={code.id}
+                              className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-stone-50 cursor-pointer transition-colors"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedCodes.includes(code.id)}
+                                onChange={() => toggleCode(code.id)}
+                                className="w-3.5 h-3.5 rounded border-stone-300 text-legal-navy focus:ring-legal-gold/50 cursor-pointer"
+                              />
+                              <span className="text-[11px] text-legal-ink font-sans truncate">
+                                {code.name}
+                              </span>
+                            </label>
+                          ))
+                        )}
                       </div>
                     </motion.div>
                   )}
